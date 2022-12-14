@@ -6,11 +6,11 @@ const TableNames = {
   SHORT_URLS: 'short_urls',
 };
 
-const getShortUrl = async (shortUrl: string) => {
+const getShortUrl = async (id: string) => {
   try {
     const res = await knex
       .from(TableNames.SHORT_URLS)
-      .where('short_url', shortUrl)
+      .where('id', id)
       .select()
       .first();
 
@@ -20,20 +20,21 @@ const getShortUrl = async (shortUrl: string) => {
   }
 };
 
-const createShortUrl = async (input: { longUrl: string; shortUrl: string }) => {
+const createShortUrl = async (input: { longUrl: string; id: string }) => {
   try {
-    const { longUrl, shortUrl } = input;
+    const { longUrl, id } = input;
 
-    const insertRes = await knex(TableNames.SHORT_URLS).insert({
-      short_url: shortUrl,
+    await knex(TableNames.SHORT_URLS).insert({
+      id: id,
       long_url: longUrl,
       created_at: knex.fn.now(),
     });
 
     const res = await knex
       .from(TableNames.SHORT_URLS)
-      .where('short_url', _.head(insertRes))
-      .select();
+      .where('id', id)
+      .select()
+      .first();
 
     return camelize(res);
   } catch (error) {

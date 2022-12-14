@@ -4,12 +4,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-nocheck
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { ShortUrlModel } from '../models/url.model';
+import { ShortUrlModel } from '../graphql/models/url.model';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -20,10 +21,36 @@ export type Scalars = {
   DateTime: string;
 };
 
+export type CreateShortUrlInput = {
+  longUrl: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createShortUrl?: Maybe<ShortUrl>;
+};
+
+
+export type MutationCreateShortUrlArgs = {
+  input: CreateShortUrlInput;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  shortUrl?: Maybe<ShortUrl>;
+};
+
+
+export type QueryShortUrlArgs = {
+  id: Scalars['ID'];
+};
+
 export type ShortUrl = {
   __typename?: 'ShortUrl';
   createdAt?: Maybe<Scalars['DateTime']>;
-  url?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  longUrl?: Maybe<Scalars['String']>;
+  shortUrl?: Maybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -97,7 +124,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CreateShortUrlInput: CreateShortUrlInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Query: ResolverTypeWrapper<{}>;
   ShortUrl: ResolverTypeWrapper<ShortUrlModel>;
   String: ResolverTypeWrapper<Scalars['String']>;
 }>;
@@ -105,7 +136,11 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
+  CreateShortUrlInput: CreateShortUrlInput;
   DateTime: Scalars['DateTime'];
+  ID: Scalars['ID'];
+  Mutation: {};
+  Query: {};
   ShortUrl: ShortUrlModel;
   String: Scalars['String'];
 }>;
@@ -114,14 +149,26 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createShortUrl?: Resolver<Maybe<ResolversTypes['ShortUrl']>, ParentType, ContextType, RequireFields<MutationCreateShortUrlArgs, 'input'>>;
+}>;
+
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  shortUrl?: Resolver<Maybe<ResolversTypes['ShortUrl']>, ParentType, ContextType, RequireFields<QueryShortUrlArgs, 'id'>>;
+}>;
+
 export type ShortUrlResolvers<ContextType = any, ParentType extends ResolversParentTypes['ShortUrl'] = ResolversParentTypes['ShortUrl']> = ResolversObject<{
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  longUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  shortUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   DateTime?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
   ShortUrl?: ShortUrlResolvers<ContextType>;
 }>;
 

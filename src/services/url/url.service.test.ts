@@ -10,14 +10,33 @@ jest.mock('nanoid', () => ({
 }));
 jest.mock('@data-access');
 
-describe('url.service', () => {
-  const nanoid = customAlphabet('1234567890abcdef', 7);
+const nanoid = customAlphabet('1234567890abcdef', 7);
 
-  describe('generateShortId', () => {
+describe('url.service', () => {
+  describe('getShortUrl', () => {
+    test('it should retrieve the short url', async () => {
+      const mockInput = 'adad328';
+
+      const mockCreated = {
+        longUrl: 'long328',
+        id: mockInput,
+        createdAt: '2022-12-14 07:42:37',
+      };
+
+      (UrlStore.getShortUrl as jest.Mock).mockResolvedValue(mockCreated);
+
+      const res = await UrlService.getShortUrl(mockInput);
+
+      expect(res).toEqual(mockCreated);
+    });
+  });
+
+  describe('generateIdString', () => {
     test('it should generate a string of length 7 characters', async () => {
+      const nanoid = customAlphabet('1234567890abcdef', 7);
       const generatedId = nanoid();
 
-      const res = UrlService.generateShortId();
+      const res = UrlService.generateIdString();
 
       expect(res).toBe(generatedId);
       expect(res).toHaveLength(7);
@@ -26,15 +45,16 @@ describe('url.service', () => {
 
   describe('generateUniqueShortUrl', () => {
     test('it should generate a unique short url', async () => {
+      const nanoid = customAlphabet('1234567890abcdef', 7);
       const generatedId = nanoid();
 
       const spy = jest
-        .spyOn(UrlService, 'generateShortId')
+        .spyOn(UrlService, 'generateIdString')
         .mockReturnValue(generatedId);
 
       (UrlStore.getShortUrl as jest.Mock).mockResolvedValue(undefined);
 
-      const res = await UrlService.generateUniqueShortUrl();
+      const res = await UrlService.generateUniqueId();
 
       expect(res).toBe(generatedId);
 
@@ -42,10 +62,11 @@ describe('url.service', () => {
     });
 
     test('it should retry if the generated url already exists', async () => {
+      const nanoid = customAlphabet('1234567890abcdef', 7);
       const generatedId = nanoid();
 
       const spy = jest
-        .spyOn(UrlService, 'generateShortId')
+        .spyOn(UrlService, 'generateIdString')
         .mockReturnValue(generatedId);
 
       const mockDbShortUrl = {
@@ -57,7 +78,7 @@ describe('url.service', () => {
         .mockResolvedValueOnce(mockDbShortUrl)
         .mockResolvedValueOnce(undefined);
 
-      const res = await UrlService.generateUniqueShortUrl();
+      const res = await UrlService.generateUniqueId();
 
       expect(spy).toHaveBeenCalledTimes(3);
       expect(res).toBe(generatedId);
@@ -69,7 +90,7 @@ describe('url.service', () => {
       const generatedId = nanoid();
 
       const spy = jest
-        .spyOn(UrlService, 'generateShortId')
+        .spyOn(UrlService, 'generateIdString')
         .mockReturnValue(generatedId);
 
       (UrlStore.getShortUrl as jest.Mock).mockResolvedValue({
@@ -77,7 +98,7 @@ describe('url.service', () => {
       });
 
       try {
-        const res = await UrlService.generateUniqueShortUrl();
+        const res = await UrlService.generateUniqueId();
       } catch (error) {
         expect(error as string).toBe(
           'Exceeded maximum retries, please report this issue.',
@@ -85,6 +106,39 @@ describe('url.service', () => {
 
         expect(spy).toHaveBeenCalledTimes(5);
       }
+
+      spy.mockRestore();
+    });
+  });
+
+  describe('createShortUrl', () => {
+    test('it should generate the url and save it to store', async () => {
+      const generatedId = nanoid();
+      const mockInput = {
+        longUrl: 'https://ginger.root',
+      };
+
+      const mockCreated = {
+        longUrl: mockInput.longUrl,
+        id: generatedId,
+        createdAt: '2022-12-14 07:42:37',
+      };
+
+      const spy = jest
+        .spyOn(UrlService, 'generateUniqueId')
+        .mockResolvedValue(generatedId);
+
+      (UrlStore.createShortUrl as jest.Mock).mockResolvedValue(mockCreated);
+
+      const res = await UrlService.createShortUrl(mockInput);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      expect(UrlStore.createShortUrl).toHaveBeenCalledWith({
+        longUrl: mockInput.longUrl,
+        id: generatedId,
+      });
+      expect(res).toEqual(mockCreated);
 
       spy.mockRestore();
     });

@@ -4,7 +4,21 @@ export const schema = gql`
   scalar DateTime
 
   type ShortUrl {
-    url: String
+    id: ID
+    shortUrl: String
+    longUrl: String
     createdAt: DateTime
+  }
+
+  input CreateShortUrlInput {
+    longUrl: String!
+  }
+
+  extend type Query {
+    shortUrl(id: ID!): ShortUrl
+  }
+
+  extend type Mutation {
+    createShortUrl(input: CreateShortUrlInput!): ShortUrl
   }
 `;

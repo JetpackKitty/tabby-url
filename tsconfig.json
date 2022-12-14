@@ -12,7 +12,9 @@
     "paths": {
       "@db/*": ["src/db/*"],
       "@data-access": ["src/data-access/index"],
-      "@generated/*": ["src/generated/*"]
+      "@graphql/*": ["src/graphql/*"],
+      "@generated/*": ["src/generated/*"],
+      "@services": ["src/services/index"]
     }
   }
 }

@@ -26,7 +26,7 @@ describe('url.store', () => {
   describe('getShortUrl', () => {
     test('it should get a given short url', async () => {
       const mockDbResponse = {
-        short_url: 'abcd123',
+        id: 'abcd123',
         created_at: '2022-12-14 07:42:37',
         long_url: 'https://normalcat.com',
       };
@@ -61,23 +61,21 @@ describe('url.store', () => {
     test('it should create a new short url entry', async () => {
       const mockInput = {
         longUrl: 'https://longestcat.com',
-        shortUrl: 'exbc238',
+        id: 'exbc238',
       };
 
       const mockDbResponse = {
-        short_url: 'exbc238',
+        id: 'exbc238',
         created_at: '2022-12-14 07:42:37',
         long_url: mockInput.longUrl,
       };
 
       tracker.on.select(TableNames.SHORT_URLS).response(mockDbResponse);
-      tracker.on
-        .insert(TableNames.SHORT_URLS)
-        .response([mockDbResponse.short_url]);
+      tracker.on.insert(TableNames.SHORT_URLS).response([mockDbResponse.id]);
 
       const res = await UrlStore.createShortUrl(mockInput);
 
-      const expectedBindings = [mockInput.longUrl, mockInput.shortUrl];
+      const expectedBindings = [mockInput.id, mockInput.longUrl];
 
       const expectedResult = camelize(mockDbResponse);
 
@@ -93,11 +91,11 @@ describe('url.store', () => {
     test('it should reject if there is an error or conflict', async () => {
       const mockInput = {
         longUrl: 'https://longestcat.com',
-        shortUrl: 'exbc238',
+        id: 'exbc238',
       };
 
       const mockDbResponse = {
-        short_url: 'exbc238',
+        id: 'exbc238',
         created_at: '2022-12-14 07:42:37',
         long_url: mockInput.longUrl,
       };
