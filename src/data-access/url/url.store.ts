@@ -1,6 +1,6 @@
 import knex from '@db/knex';
 import _ from 'lodash';
-import { camelize } from 'humps';
+import { camelizeKeys as camelize } from 'humps';
 
 const TableNames = {
   SHORT_URLS: 'short_urls',
