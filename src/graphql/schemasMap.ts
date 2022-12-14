@@ -1,12 +1,12 @@
-import { gql } from 'apollo-server-express';
 import 'graphql-import-node';
 
-import { schema as urlSchema } from './modules/url';
-
-import { typeDefs as scalarTypes } from 'graphql-scalars';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import resolvers from './resolversMap';
 import { GraphQLSchema } from 'graphql';
+import { gql } from 'apollo-server-express';
+import { typeDefs as scalarTypes } from 'graphql-scalars';
+
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { schema as urlSchema } from './modules/url';
+import resolvers from './resolversMap';
 
 const types = gql`
   type Query {

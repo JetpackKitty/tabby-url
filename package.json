@@ -6,11 +6,13 @@
   "author": "enoch <enochlau@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --respawn --clear --transpile-only -r source-map-support/register src/server.ts",
-    "start": "yarn build && node dist/server.js",
-    "build": "tsc --project tsconfig.json",
+    "dev": "tsnd --respawn --clear --transpile-only -r source-map-support/register -r tsconfig-paths/register src/server.ts",
+    "start": "yarn build && node dist/src/server.js",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "codegen": "graphql-codegen --config codegen.yml",
-    "codegen:watch": "graphql-codegen --config codegen.yml --watch"
+    "codegen:watch": "graphql-codegen --config codegen.yml --watch",
+    "migrate:list": "knex migrate:list",
+    "migrate:latest": "knex migrate:latest"
   },
   "dependencies": {
     "apollo-server-express": "^3.3.0",
@@ -20,7 +22,10 @@
     "graphql": "^16.6.0",
     "graphql-import-node": "^0.0.5",
     "graphql-scalars": "^1.20.1",
+    "humps": "^2.0.1",
+    "knex": "^2.3.0",
     "lodash": "^4.17.21",
+    "mysql2": "^2.3.3",
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
@@ -33,6 +38,7 @@
     "@graphql-codegen/typescript": "^2.8.5",
     "@graphql-codegen/typescript-resolvers": "^2.7.10",
     "@types/express": "^4.17.15",
+    "@types/humps": "^2.0.2",
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.11.15",
     "babel-plugin-module-resolver": "^4.1.0",
@@ -45,6 +51,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-prettier": "^4.2.1",
+    "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "tsc-alias": "^1.8.2",
     "tsconfig-paths": "^4.1.1",

@@ -28,6 +28,8 @@ module.exports = {
       'babel-module': {},
       alias: {
         map: [
+          ['@db', './src/db'],
+          ['@data-access', './src/data-access'],
           ['@graphql', './src/graphql'],
           ['@generated', './src/generated'],
         ],

@@ -10,6 +10,8 @@ module.exports = {
       {
         root: ['.'],
         alias: {
+          '@db': './db',
+          '@data-access': './data-access',
           '@generated': './generated',
           '@graphql': './graphql',
           '@models': './models',
