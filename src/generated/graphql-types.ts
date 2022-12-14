@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-nocheck
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { ShortUrlModel } from '../models/url.model';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -97,7 +98,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
-  ShortUrl: ResolverTypeWrapper<ShortUrl>;
+  ShortUrl: ResolverTypeWrapper<ShortUrlModel>;
   String: ResolverTypeWrapper<Scalars['String']>;
 }>;
 
@@ -105,7 +106,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   DateTime: Scalars['DateTime'];
-  ShortUrl: ShortUrl;
+  ShortUrl: ShortUrlModel;
   String: Scalars['String'];
 }>;
 

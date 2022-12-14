@@ -15,6 +15,7 @@ module.exports = {
           '@generated': './generated',
           '@graphql': './graphql',
           '@models': './models',
+          '@services': './services',
         },
       },
     ],

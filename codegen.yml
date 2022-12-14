@@ -5,6 +5,8 @@ generates:
   src/generated/graphql-types.ts:
     config:
       useIndexSignature: true
+      mappers:
+        ShortUrl: '../models/url.model#ShortUrlModel'
     plugins:
       - 'typescript'
       - 'typescript-resolvers'

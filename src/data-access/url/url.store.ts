@@ -20,6 +20,28 @@ const getShortUrl = async (shortUrl: string) => {
   }
 };
 
+const createShortUrl = async (input: { longUrl: string; shortUrl: string }) => {
+  try {
+    const { longUrl, shortUrl } = input;
+
+    const insertRes = await knex(TableNames.SHORT_URLS).insert({
+      short_url: shortUrl,
+      long_url: longUrl,
+      created_at: knex.fn.now(),
+    });
+
+    const res = await knex
+      .from(TableNames.SHORT_URLS)
+      .where('short_url', _.head(insertRes))
+      .select();
+
+    return camelize(res);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 export default {
   getShortUrl,
+  createShortUrl,
 };
