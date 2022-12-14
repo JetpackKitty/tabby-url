@@ -1,4 +1,9 @@
 import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import schema from './graphql/schemasMap';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
@@ -7,8 +12,16 @@ const startServer = async () => {
     res.send('Hello World!');
   });
 
-  app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+  const server = new ApolloServer({
+    schema,
+  });
+
+  await server.start();
+
+  server.applyMiddleware({ app, path: '/graphql' });
+
+  app.listen(5500, () => {
+    console.log('Server is running on port 5500');
   });
 };
 

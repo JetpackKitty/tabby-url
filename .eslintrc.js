@@ -23,4 +23,16 @@ module.exports = {
     ],
     'import/no-named-as-default-member': 0,
   },
+  settings: {
+    'import/resolver': {
+      'babel-module': {},
+      alias: {
+        map: [
+          ['@graphql', './src/graphql'],
+          ['@generated', './src/generated'],
+        ],
+        extensions: ['.ts', '.js', '.jsx', '.json'],
+      },
+    },
+  },
 };
