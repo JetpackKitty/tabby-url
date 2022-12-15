@@ -6,6 +6,9 @@ const TableNames = {
   SHORT_URLS: 'short_urls',
 };
 
+// Caching is not implemented in this example but if it were to be used
+// to improve performance, then it would implemented in this layer.
+
 const getShortUrl = async (id: string) => {
   try {
     const res = await knex

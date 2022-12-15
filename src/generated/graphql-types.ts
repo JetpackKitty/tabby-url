@@ -22,6 +22,10 @@ export type Scalars = {
 };
 
 export type CreateShortUrlInput = {
+  /**
+   * It is assumed that the longUrl is already validated by the client and will
+   * be a fully formed valid web url (e.g. https://[...])
+   */
   longUrl: Scalars['String'];
 };
 
@@ -50,6 +54,10 @@ export type MutationDeleteShortUrlArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  /**
+   * This ID here is just the ID of the short url, NOT the shortUrl field
+   * e.g. https://mechacat.app/1234567890 would have an ID of 1234567890
+   */
   shortUrl?: Maybe<ShortUrl>;
   /** This is to demonstrate using context for checking authentication in a protected endpoint */
   shortUrls?: Maybe<Array<ShortUrl>>;
@@ -69,6 +77,11 @@ export type QueryShortUrlsArgs = {
 export type ShortUrl = {
   __typename?: 'ShortUrl';
   createdAt?: Maybe<Scalars['DateTime']>;
+  /**
+   * The ID of the short url is also used as the primary key. This omits the URL part of the short url
+   * e.g. https://mechacat.app/1234567890 would have an ID of 1234567890. This is the ID used to make
+   * query requests, NOT the shortUrl field.
+   */
   id?: Maybe<Scalars['ID']>;
   longUrl?: Maybe<Scalars['String']>;
   shortUrl?: Maybe<Scalars['String']>;
