@@ -25,9 +25,17 @@ export type CreateShortUrlInput = {
   longUrl: Scalars['String'];
 };
 
+export type DeleteShortUrlResponse = {
+  __typename?: 'DeleteShortUrlResponse';
+  affectedRows?: Maybe<Scalars['Int']>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createShortUrl?: Maybe<ShortUrl>;
+  /** This is to demonstrate returning a custom response type */
+  deleteShortUrl?: Maybe<DeleteShortUrlResponse>;
 };
 
 
@@ -35,14 +43,27 @@ export type MutationCreateShortUrlArgs = {
   input: CreateShortUrlInput;
 };
 
+
+export type MutationDeleteShortUrlArgs = {
+  id: Scalars['ID'];
+};
+
 export type Query = {
   __typename?: 'Query';
   shortUrl?: Maybe<ShortUrl>;
+  /** This is to demonstrate using context for checking authentication in a protected endpoint */
+  shortUrls?: Maybe<Array<ShortUrl>>;
 };
 
 
 export type QueryShortUrlArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryShortUrlsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type ShortUrl = {
@@ -126,7 +147,9 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateShortUrlInput: CreateShortUrlInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  DeleteShortUrlResponse: ResolverTypeWrapper<DeleteShortUrlResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   ShortUrl: ResolverTypeWrapper<ShortUrlModel>;
@@ -138,7 +161,9 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   CreateShortUrlInput: CreateShortUrlInput;
   DateTime: Scalars['DateTime'];
+  DeleteShortUrlResponse: DeleteShortUrlResponse;
   ID: Scalars['ID'];
+  Int: Scalars['Int'];
   Mutation: {};
   Query: {};
   ShortUrl: ShortUrlModel;
@@ -149,12 +174,20 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type DeleteShortUrlResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteShortUrlResponse'] = ResolversParentTypes['DeleteShortUrlResponse']> = ResolversObject<{
+  affectedRows?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createShortUrl?: Resolver<Maybe<ResolversTypes['ShortUrl']>, ParentType, ContextType, RequireFields<MutationCreateShortUrlArgs, 'input'>>;
+  deleteShortUrl?: Resolver<Maybe<ResolversTypes['DeleteShortUrlResponse']>, ParentType, ContextType, RequireFields<MutationDeleteShortUrlArgs, 'id'>>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   shortUrl?: Resolver<Maybe<ResolversTypes['ShortUrl']>, ParentType, ContextType, RequireFields<QueryShortUrlArgs, 'id'>>;
+  shortUrls?: Resolver<Maybe<Array<ResolversTypes['ShortUrl']>>, ParentType, ContextType, Partial<QueryShortUrlsArgs>>;
 }>;
 
 export type ShortUrlResolvers<ContextType = any, ParentType extends ResolversParentTypes['ShortUrl'] = ResolversParentTypes['ShortUrl']> = ResolversObject<{
@@ -167,6 +200,7 @@ export type ShortUrlResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   DateTime?: GraphQLScalarType;
+  DeleteShortUrlResponse?: DeleteShortUrlResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ShortUrl?: ShortUrlResolvers<ContextType>;

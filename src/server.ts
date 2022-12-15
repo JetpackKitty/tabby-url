@@ -9,19 +9,29 @@ const app = express();
 
 const startServer = async () => {
   app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('TabbyUrl is running');
   });
 
   const server = new ApolloServer({
     schema,
+    context: async ({ req }) => {
+      if (req.headers.authorization) {
+        // In real life, this portion of code
+        // would be proper authentication validation
+        return { isAuthenticated: true };
+      }
+
+      return { isAuthenticated: false };
+    },
   });
 
   await server.start();
 
   server.applyMiddleware({ app, path: '/graphql' });
 
-  app.listen(5500, () => {
-    console.log('Server is running on port 5500');
+  const port = process.env.SERVER_PORT || 5500;
+  app.listen(port, () => {
+    console.log(`TabbyUrl is running on port ${port}`);
   });
 };
 

@@ -26,6 +26,20 @@ const generateIdString = () => {
   return generatedId;
 };
 
+const listShortUrls = async (options?: { limit: number; offset: number }) => {
+  try {
+    const { limit = 50, offset = 0 } = options || {};
+    const res = await UrlStore.listShortUrls({
+      limit,
+      offset,
+    });
+
+    return res;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const generateUniqueId = async (attempts: number = 1): Promise<string> => {
   try {
     const generatedId = exportFunctions.generateIdString();
@@ -66,12 +80,23 @@ const createShortUrl = async (input: { longUrl: string }) => {
   }
 };
 
+const deleteShortUrl = async (id: string) => {
+  try {
+    const deletedResult = await UrlStore.deleteShortUrl(id);
+    return deletedResult;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 // this manner of export is necessary to allow for mocking functions within the same module
 const exportFunctions = {
   getShortUrl,
+  listShortUrls,
   generateIdString,
   generateUniqueId,
   createShortUrl,
+  deleteShortUrl,
 };
 
 export default exportFunctions;

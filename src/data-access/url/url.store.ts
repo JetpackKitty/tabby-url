@@ -20,6 +20,22 @@ const getShortUrl = async (id: string) => {
   }
 };
 
+const listShortUrls = async (options?: { limit: number; offset: number }) => {
+  try {
+    const { limit = 50, offset = 0 } = options || {};
+
+    const res = await knex
+      .from(TableNames.SHORT_URLS)
+      .limit(limit)
+      .offset(offset)
+      .select();
+
+    return camelize(res);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const createShortUrl = async (input: { longUrl: string; id: string }) => {
   try {
     const { longUrl, id } = input;
@@ -42,7 +58,19 @@ const createShortUrl = async (input: { longUrl: string; id: string }) => {
   }
 };
 
+const deleteShortUrl = async (id: string) => {
+  try {
+    const res = await knex(TableNames.SHORT_URLS).where('id', id).del();
+
+    return res;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 export default {
   getShortUrl,
+  listShortUrls,
   createShortUrl,
+  deleteShortUrl,
 };

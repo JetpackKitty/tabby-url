@@ -143,4 +143,39 @@ describe('url.service', () => {
       spy.mockRestore();
     });
   });
+
+  describe('listShortUrls', () => {
+    test('it should return a list of short urls', async () => {
+      const mockShortUrls = [
+        {
+          longUrl: 'https://ginger.root',
+          id: 'tes2790',
+          createdAt: '2022-12-14 07:42:37',
+        },
+        {
+          longUrl: 'https://ginger.root',
+          id: 'exa3829',
+          createdAt: '2022-12-14 07:42:37',
+        },
+      ];
+
+      (UrlStore.listShortUrls as jest.Mock).mockResolvedValue(mockShortUrls);
+
+      const res = await UrlService.listShortUrls();
+
+      expect(UrlStore.listShortUrls).toHaveBeenCalled();
+      expect(res).toEqual(mockShortUrls);
+    });
+  });
+
+  describe('deleteShortUrl', () => {
+    test('it should delete a short url', async () => {
+      (UrlStore.deleteShortUrl as jest.Mock).mockResolvedValue(1);
+
+      const res = await UrlService.deleteShortUrl('tes2790');
+
+      expect(UrlStore.deleteShortUrl).toHaveBeenCalledWith('tes2790');
+      expect(res).toBe(1);
+    });
+  });
 });

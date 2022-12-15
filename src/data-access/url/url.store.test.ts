@@ -109,4 +109,48 @@ describe('url.store', () => {
       }
     });
   });
+
+  describe('listShortUrls', () => {
+    test('it should list all short urls', async () => {
+      const mockDbResponse = [
+        {
+          id: 'abcd123',
+          created_at: '2022-12-14 07:42:37',
+          long_url: 'https://normalcat.com',
+        },
+        {
+          id: 'exbc238',
+          created_at: '2022-12-14 07:42:37',
+          long_url: 'https://longestcat.com',
+        },
+      ];
+      tracker.on.select(TableNames.SHORT_URLS).response(mockDbResponse);
+
+      const res = await UrlStore.listShortUrls();
+
+      const selectHistory = tracker.history.select;
+
+      const expectedResult = camelize(mockDbResponse);
+
+      expect(selectHistory).toHaveLength(1);
+      expect(selectHistory[0].method).toEqual('select');
+      expect(selectHistory[0].bindings).toEqual([50]);
+
+      expect(res).toEqual(expectedResult);
+    });
+  });
+
+  describe('deleteShortUrl', () => {
+    test('it should delete a short url', async () => {
+      tracker.on.delete(TableNames.SHORT_URLS).response(1);
+
+      const res = await UrlStore.deleteShortUrl('abcd123');
+
+      const deleteHistory = tracker.history.delete;
+
+      expect(deleteHistory).toHaveLength(1);
+      expect(deleteHistory[0].method).toEqual('delete');
+      expect(deleteHistory[0].bindings).toEqual(['abcd123']);
+    });
+  });
 });
