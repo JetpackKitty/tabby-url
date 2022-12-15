@@ -8,6 +8,8 @@ TabbyUrl is a simple demo for a URL shortener app backend using GraphQL and Type
 The GraphQL backend can be previewed here: 
 [https://tabby-url.mechacat.app/graphql](https://tabby-url.mechacat.app/graphql)
 
+To simulate an authenticated client token, just add any string to the `Authorization` header in the request.
+
 You can also use [Apollo Studio Explorer](https://studio.apollographql.com/sandbox/explorer) to view and query the schema.
 
 ## Usage
